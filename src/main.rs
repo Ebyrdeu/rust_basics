@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::io;
 use std::io::Stdin;
 
@@ -12,7 +12,7 @@ e. Avsluta
 ";
 
 struct Prices {
-    prices: HashMap<u16, u16>,
+    prices: BTreeMap<u16, u16>,
 }
 
 trait Calculator {
@@ -26,7 +26,7 @@ trait Calculator {
 impl Calculator for Prices {
     fn new() -> Self {
         Self {
-            prices: HashMap::new(),
+            prices: BTreeMap::new(),
         }
     }
     fn input(&mut self, read: &mut Stdin) {
@@ -75,7 +75,11 @@ impl Calculator for Prices {
     }
 
     fn sort(&mut self) {
-        todo!()
+        let first_four: Vec<_> = self.prices.iter().take(4).collect();
+
+        for (hour, price) in first_four {
+            println!("{:02}-{:02} {} öre", hour, hour + 1, price);
+        }
     }
 
     fn best_for_four_hours(&mut self) {
