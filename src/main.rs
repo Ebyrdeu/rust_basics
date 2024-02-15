@@ -18,6 +18,9 @@ struct Prices {
 trait Calculator {
     fn new() -> Self;
     fn input(&mut self, read: &mut Stdin);
+    fn min_max_average(&mut self);
+    fn sort(&mut self);
+    fn best_for_four_hours(&mut self);
 }
 
 impl Calculator for Prices {
@@ -44,6 +47,39 @@ impl Calculator for Prices {
             self.prices.insert(hour, price_result);
             answer.clear();
         }
+    }
+
+    fn min_max_average(&mut self) {
+        // min value
+        match self.prices.iter().min_by_key(|entry| entry.1) {
+            None => {
+                println!("Could not find a value please insert values first");
+            }
+            Some(value) => {
+                println!("{:?}", value);
+            }
+        }
+        // max value
+        match self.prices.iter().max_by_key(|entry| entry.1) {
+            None => {
+                println!("Could not find a value please insert values first");
+            }
+            Some(value) => {
+                println!("{:?}", value);
+            }
+        }
+
+        let average = self.prices.iter().map(|entry| entry.1).sum::<u16>() / 24;
+
+        println!("{:?}", average);
+    }
+
+    fn sort(&mut self) {
+        todo!()
+    }
+
+    fn best_for_four_hours(&mut self) {
+        todo!()
     }
 }
 
@@ -72,9 +108,9 @@ fn menu_option(read: &mut Stdin, prices: &mut Prices) -> bool {
 
     match answer.trim() {
         "1" => prices.input(read),
-        "2" => println!("average"),
-        "3" => println!("sorting"),
-        "4" => println!("best_four_hours"),
+        "2" => prices.min_max_average(),
+        "3" => prices.sort(),
+        "4" => prices.best_for_four_hours(),
         "e" | "E" => {
             println!("Exiting");
             return false;
