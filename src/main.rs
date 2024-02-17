@@ -100,7 +100,7 @@ impl Calculator for Prices {
                 best_hours = consecutive_hours;
             }
         }
-        for i in 0..best_hours {
+        for i in 0..best_hours.len() {
             println!("{:?}", self.prices.get(&(i as u16)));
         }
     }
