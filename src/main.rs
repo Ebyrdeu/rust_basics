@@ -20,7 +20,7 @@ trait Calculator {
     fn input(&mut self, read: &mut Stdin);
     fn min_max_average(&mut self);
     fn sort(&mut self);
-    fn best_for_four_hours(&mut self);
+    fn cheapest_4_hours(&mut self);
 }
 
 impl Calculator for Prices {
@@ -71,7 +71,7 @@ impl Calculator for Prices {
 
         let average = self.prices.iter().map(|entry| entry.1).sum::<u16>() / 24;
 
-        println!("{:?}", average);
+        println!("{:?}", average as f32);
     }
 
     fn sort(&mut self) {
@@ -82,11 +82,29 @@ impl Calculator for Prices {
         }
     }
 
-    fn best_for_four_hours(&mut self) {
-        todo!()
+    fn cheapest_4_hours(&mut self) {
+        let mut min_total_price = u16::MAX;
+        let mut best_hours: Vec<String> = Vec::new();
+
+        for i in 0..=(self.prices.len() - 4) {
+            let mut total = 0;
+            let mut consecutive_hours: Vec<String> = Vec::new();
+
+            for (hour, price) in self.prices.iter().skip(i).take(4) {
+                total += *price;
+                consecutive_hours.push(hour.to_string());
+            }
+
+            if total < min_total_price {
+                min_total_price = total;
+                best_hours = consecutive_hours;
+            }
+        }
+        for i in 0..best_hours {
+            println!("{:?}", self.prices.get(&(i as u16)));
+        }
     }
 }
-
 fn main() {
     let mut prices = Prices::new();
 
@@ -114,7 +132,7 @@ fn menu_option(read: &mut Stdin, prices: &mut Prices) -> bool {
         "1" => prices.input(read),
         "2" => prices.min_max_average(),
         "3" => prices.sort(),
-        "4" => prices.best_for_four_hours(),
+        "4" => prices.cheapest_4_hours(),
         "e" | "E" => {
             println!("Exiting");
             return false;
